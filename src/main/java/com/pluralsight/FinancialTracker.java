@@ -1,6 +1,11 @@
 package com.pluralsight;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,8 +24,8 @@ public class FinancialTracker {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
+        System.out.println("Welcome to TransactionApp");
         while (running) {
-            System.out.println("Welcome to TransactionApp");
             System.out.println("Choose an option:");
             System.out.println("D) Add Deposit");
             System.out.println("P) Make Payment (Debit)");
@@ -52,6 +57,26 @@ public class FinancialTracker {
     }
 
     public static void loadTransactions(String fileName) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                String[] str = line.split("\\|");
+                String[] splitDate = str[0].split("-");
+                String[] splitTime = str[1].split(":");
+                transactions.add( new Transaction(
+                        // Day, Month, Year
+                        LocalDate.of(Integer.parseInt(splitDate[0]),Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2])), // Date
+                        LocalTime.of(Integer.parseInt(splitTime[0]),Integer.parseInt(splitTime[1]), Integer.parseInt(splitTime[2])), // Time
+                        str[2], // Description
+                        str[3], // Vendor
+                        new BigDecimal(str[4])
+                ));
+            }
+            bufferedReader.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
         // This method should load transactions from a file with the given file name.
         // If the file does not exist, it should be created.
         // The transactions should be stored in the `transactions` ArrayList.
@@ -83,7 +108,7 @@ public class FinancialTracker {
         while (running) {
             System.out.println("Ledger");
             System.out.println("Choose an option:");
-            System.out.println("A) A`ll");
+            System.out.println("A) All");
             System.out.println("D) Deposits");
             System.out.println("P) Payments");
             System.out.println("R) Reports");
@@ -114,6 +139,9 @@ public class FinancialTracker {
     }
 
     private static void displayLedger() {
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction);
+        }
         // This method should display a table of all transactions in the `transactions` ArrayList.
         // The table should have columns for date, time, description, vendor, and amount.
     }
