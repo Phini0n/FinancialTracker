@@ -50,6 +50,13 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return String.format()
+        return "Transaction{" +
+                "date=" + date +
+                ", time=" + time +
+                ", description='" + description + '\'' +
+                ", vendor='" + vendor + '\'' +
+                ", amount=" + amount +
+                ", isPayment=" + isPayment +
+                '}';
     }
 }
