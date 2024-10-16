@@ -52,10 +52,17 @@ public class FinancialTracker {
                     break;
             }
         }
-
         scanner.close();
     }
 
+    // This method should load transactions from a file with the given file name.
+    // If the file does not exist, it should be created.
+    // The transactions should be stored in the `transactions` ArrayList.
+    // Each line of the file represents a single transaction in the following format:
+    // <date>|<time>|<description>|<vendor>|<amount>
+    // For example: 2023-04-15|10:13:25|ergonomic keyboard|Amazon|-89.50
+    // After reading all the transactions, the file should be closed.
+    // If any errors occur, an appropriate error message should be displayed.
     public static void loadTransactions(String fileName) {
         if (FILE.exists()) {
             try {
@@ -71,7 +78,7 @@ public class FinancialTracker {
                             LocalTime.of(Integer.parseInt(splitTime[0]),Integer.parseInt(splitTime[1]), Integer.parseInt(splitTime[2])), // Time
                             str[2], // Description
                             str[3], // Vendor
-                            new BigDecimal(str[4])
+                            new BigDecimal(str[4]) // Payment / Deposit
                     ));
                 }
                 bufferedReader.close();
@@ -88,18 +95,7 @@ public class FinancialTracker {
             } catch (Exception e) {
                 System.out.println("Error: " + e);
             }
-
         }
-
-        // This method should load transactions from a file with the given file name.
-        // If the file does not exist, it should be created.
-        // The transactions should be stored in the `transactions` ArrayList.
-        // Each line of the file represents a single transaction in the following format:
-        // <date>|<time>|<description>|<vendor>|<amount>
-        // For example: 2023-04-15|10:13:25|ergonomic keyboard|Amazon|-89.50
-        // After reading all the transactions, the file should be closed.
-        // If any errors occur, an appropriate error message should be displayed.
-
     }
 
     private static void addDeposit(Scanner scanner) {
@@ -110,12 +106,34 @@ public class FinancialTracker {
         // The new deposit should be added to the `transactions` ArrayList.
     }
 
+    // This method should prompt the user to enter the date, time, description, vendor, and amount of a payment.
+    // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
+    // The amount received should be a positive number then transformed to a negative number.
+    // After validating the input, a new `Transaction` object should be created with the entered values.
+    // The new payment should be added to the `transactions` ArrayList.
     private static void addPayment(Scanner scanner) {
-        // This method should prompt the user to enter the date, time, description, vendor, and amount of a payment.
-        // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
-        // The amount received should be a positive number then transformed to a negative number.
-        // After validating the input, a new `Transaction` object should be created with the entered values.
-        // The new payment should be added to the `transactions` ArrayList.
+        System.out.print("Enter the date in the format \"yyyy-MM-dd\": ");
+        LocalDate date = LocalDate.parse(scanner.nextLine(), DATE_FORMATTER);
+        System.out.print("Enter the time in the format \"HH:mm:ss\": ");
+        LocalTime time = LocalTime.parse(scanner.nextLine(), TIME_FORMATTER);
+        System.out.println("Enter the vendor: ");
+        String vendor = scanner.nextLine();
+        System.out.println("Enter the amount of the payment: ");
+        BigDecimal payment = scanner.nextBigDecimal();
+    }
+
+    private static void writeTransaction(Transaction transaction) {
+        // Adding to list of transactions
+        transactions.add(transaction);
+
+        // Writing to csv file
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE));
+            bufferedWriter.write(transaction.toString());
+            bufferedWriter.close();
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
+        }
     }
 
     private static void ledgerMenu(Scanner scanner) {
@@ -153,28 +171,28 @@ public class FinancialTracker {
         }
     }
 
+    // This method should display a table of all transactions in the `transactions` ArrayList.
+    // The table should have columns for date, time, description, vendor, and amount.
     private static void displayLedger() {
         for (Transaction transaction : transactions) {
             System.out.println(transaction);
         }
-        // This method should display a table of all transactions in the `transactions` ArrayList.
-        // The table should have columns for date, time, description, vendor, and amount.
     }
 
+    // This method should display a table of all deposits in the `transactions` ArrayList.
+    // The table should have columns for date, time, description, vendor, and amount.
     private static void displayDeposits() {
         for (Transaction transaction : transactions) {
             if (!transaction.isPayment) { System.out.println(transaction); }
         }
-        // This method should display a table of all deposits in the `transactions` ArrayList.
-        // The table should have columns for date, time, description, vendor, and amount.
     }
 
+    // This method should display a table of all payments in the `transactions` ArrayList.
+    // The table should have columns for date, time, description, vendor, and amount.
     private static void displayPayments() {
         for (Transaction transaction : transactions) {
             if (transaction.isPayment) { System.out.println(transaction); }
         }
-        // This method should display a table of all payments in the `transactions` ArrayList.
-        // The table should have columns for date, time, description, vendor, and amount.
     }
 
     private static void reportsMenu(Scanner scanner) {
