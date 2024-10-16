@@ -24,7 +24,7 @@ public class FinancialTracker {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
-        System.out.println("Welcome to TransactionApp");
+        System.out.print("Welcome to TransactionApp");
         while (running) {
             System.out.println("Choose an option:");
             System.out.println("D) Add Deposit");
@@ -70,17 +70,20 @@ public class FinancialTracker {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(FILE));
                 String line;
                 while ((line = bufferedReader.readLine()) != null) {
-                    String[] str = line.split("\\|");
-                    String[] splitDate = str[0].split("-");
-                    String[] splitTime = str[1].split(":");
-                    transactions.add( new Transaction(
-                            // Day, Month, Year
-                            LocalDate.of(Integer.parseInt(splitDate[0]),Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2])), // Date
-                            LocalTime.of(Integer.parseInt(splitTime[0]),Integer.parseInt(splitTime[1]), Integer.parseInt(splitTime[2])), // Time
-                            str[2], // Description
-                            str[3], // Vendor
-                            new BigDecimal(str[4]) // Payment / Deposit
-                    ));
+                    if (!line.isEmpty())
+                    {
+                        String[] str = line.split("\\|");
+                        String[] splitDate = str[0].split("-");
+                        String[] splitTime = str[1].split(":");
+                        transactions.add( new Transaction(
+                                // Day, Month, Year
+                                LocalDate.of(Integer.parseInt(splitDate[0]),Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2])), // Date
+                                LocalTime.of(Integer.parseInt(splitTime[0]),Integer.parseInt(splitTime[1]), Integer.parseInt(splitTime[2])), // Time
+                                str[2], // Description
+                                str[3], // Vendor
+                                new BigDecimal(str[4]) // Payment / Deposit
+                        ));
+                    }
                 }
                 bufferedReader.close();
             } catch (Exception e) {
@@ -131,6 +134,7 @@ public class FinancialTracker {
         if (payment.signum() > 0)
             payment = payment.negate();
 
+        scanner.nextLine();
         writeTransaction(new Transaction(date, time, description, vendor, payment));
     }
 
