@@ -102,12 +102,13 @@ public class FinancialTracker {
         }
     }
 
+    // This method should prompt the user to enter the date, time, description, vendor, and amount of a deposit.
+    // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
+    // The amount should be a positive number.
+    // After validating the input, a new `Transaction` object should be created with the entered values.
+    // The new deposit should be added to the `transactions` ArrayList.
     private static void addDeposit(Scanner scanner) {
-        // This method should prompt the user to enter the date, time, description, vendor, and amount of a deposit.
-        // The user should enter the date and time in the following format: yyyy-MM-dd HH:mm:ss
-        // The amount should be a positive number.
-        // After validating the input, a new `Transaction` object should be created with the entered values.
-        // The new deposit should be added to the `transactions` ArrayList.
+        promptTransaction(scanner, false);
     }
 
     // This method should prompt the user to enter the date, time, description, vendor, and amount of a payment.
@@ -116,6 +117,13 @@ public class FinancialTracker {
     // After validating the input, a new `Transaction` object should be created with the entered values.
     // The new payment should be added to the `transactions` ArrayList.
     private static void addPayment(Scanner scanner) {
+        promptTransaction(scanner, true);
+    }
+
+    // Custom Method
+    private static Transaction promptTransaction(Scanner scanner, boolean isPayment) {
+        String s = isPayment ? "payment" : "deposit";
+
         System.out.print("Enter the date in the format \"yyyy-MM-dd\": ");
         LocalDate date = LocalDate.parse(scanner.nextLine().trim(), DATE_FORMATTER);
 
@@ -128,16 +136,28 @@ public class FinancialTracker {
         System.out.print("Enter the vendor: ");
         String vendor = scanner.nextLine().trim();
 
-        // If user enters positive number, the program will automatically make it negative, as a payment should always be negative.
-        System.out.print("Enter the amount of the payment: ");
+        System.out.print("Enter the amount of the " + s + " : ");
         BigDecimal payment = scanner.nextBigDecimal();
-        if (payment.signum() > 0)
-            payment = payment.negate();
+
+        if (isPayment) { // If this is a payment, make sure the value remains negative.
+            if (payment.signum() > 0)
+            {
+                payment = payment.negate();
+            }
+        } else { // If this is a deposit, make sure the value remains positive.
+            if (payment.signum() < 0) {
+                payment = payment.abs();
+            }
+        }
 
         scanner.nextLine();
-        writeTransaction(new Transaction(date, time, description, vendor, payment));
+
+        Transaction transaction = new Transaction(date, time, description, vendor, payment);
+        writeTransaction(transaction);
+        return transaction;
     }
 
+    // Custom Method
     private static void writeTransaction(Transaction transaction) {
         // Adding to list of transactions
         transactions.add(transaction);
