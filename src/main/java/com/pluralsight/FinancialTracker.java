@@ -3,7 +3,6 @@ package com.pluralsight;
 import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -121,7 +120,7 @@ public class FinancialTracker {
     }
 
     // Custom Method
-    private static Transaction promptTransaction(Scanner scanner, boolean isPayment) {
+    private static void promptTransaction(Scanner scanner, boolean isPayment) {
         String s = isPayment ? "payment" : "deposit";
 
         System.out.print("Enter the date in the format \"yyyy-MM-dd\": ");
@@ -154,7 +153,6 @@ public class FinancialTracker {
 
         Transaction transaction = new Transaction(date, time, description, vendor, payment);
         writeTransaction(transaction);
-        return transaction;
     }
 
     // Custom Method
@@ -215,25 +213,31 @@ public class FinancialTracker {
     // This method should display a table of all transactions in the `transactions` ArrayList.
     // The table should have columns for date, time, description, vendor, and amount.
     private static void displayLedger() {
+        System.out.println("\ndate|time|description|vendor|amount");
         for (Transaction transaction : transactions) {
             System.out.println(transaction);
         }
+        System.out.println();
     }
 
     // This method should display a table of all deposits in the `transactions` ArrayList.
     // The table should have columns for date, time, description, vendor, and amount.
     private static void displayDeposits() {
+        System.out.println("\ndate|time|description|vendor|amount");
         for (Transaction transaction : transactions) {
             if (!transaction.isPayment) { System.out.println(transaction); }
         }
+        System.out.println();
     }
 
     // This method should display a table of all payments in the `transactions` ArrayList.
     // The table should have columns for date, time, description, vendor, and amount.
     private static void displayPayments() {
+        System.out.println("\ndate|time|description|vendor|amount");
         for (Transaction transaction : transactions) {
             if (transaction.isPayment) { System.out.println(transaction); }
         }
+        System.out.println();
     }
 
     private static void reportsMenu(Scanner scanner) {
