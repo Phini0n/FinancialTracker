@@ -146,10 +146,7 @@ public class FinancialTracker {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE, true));
             bufferedWriter.newLine();
-            bufferedWriter.write(
-                    transaction.getDate() + "|" + transaction.getTime() + "|" + transaction.getDescription() + "|" +
-                            transaction.getVendor() + "|" + transaction.getAmount()
-            );
+            bufferedWriter.write(transaction.toString());
             bufferedWriter.close();
         } catch (Exception e) {
             System.out.println("Error: " + e);
