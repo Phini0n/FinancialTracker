@@ -115,12 +115,23 @@ public class FinancialTracker {
     private static void addPayment(Scanner scanner) {
         System.out.print("Enter the date in the format \"yyyy-MM-dd\": ");
         LocalDate date = LocalDate.parse(scanner.nextLine().trim(), DATE_FORMATTER);
+
         System.out.print("Enter the time in the format \"HH:mm:ss\": ");
         LocalTime time = LocalTime.parse(scanner.nextLine().trim(), TIME_FORMATTER);
+
+        System.out.print("Enter the payment descriptor: ");
+        String description = scanner.nextLine().trim();
+
         System.out.print("Enter the vendor: ");
         String vendor = scanner.nextLine().trim();
+
+        // If user enters positive number, the program will automatically make it negative, as a payment should always be negative.
         System.out.print("Enter the amount of the payment: ");
         BigDecimal payment = scanner.nextBigDecimal();
+        if (payment.signum() > 0)
+            payment = payment.negate();
+
+        writeTransaction(new Transaction(date, time, description, vendor, payment));
     }
 
     private static void writeTransaction(Transaction transaction) {
@@ -129,8 +140,12 @@ public class FinancialTracker {
 
         // Writing to csv file
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE));
-            bufferedWriter.write(transaction.toString());
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE, true));
+            bufferedWriter.newLine();
+            bufferedWriter.write(
+                    transaction.getDate() + "|" + transaction.getTime() + "|" + transaction.getDescription() + "|" +
+                            transaction.getVendor() + "|" + transaction.getAmount()
+            );
             bufferedWriter.close();
         } catch (Exception e) {
             System.out.println("Error: " + e);

@@ -10,7 +10,7 @@ public class Transaction {
     private LocalTime time;
     private String description;
     private String vendor;
-    BigDecimal amount; // Can be negative (for payment) or positive (for check).
+    BigDecimal amount; // Can be negative (for payment) or positive (for deposit).
     boolean isPayment; // Determines whether the amount is positive (false) or negative (true).
 
     public Transaction(LocalDate date, LocalTime time, String description, String vendor, BigDecimal amount) {
