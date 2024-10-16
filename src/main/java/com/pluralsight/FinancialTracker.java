@@ -32,6 +32,7 @@ public class FinancialTracker {
             System.out.println("L) Ledger");
             System.out.println("X) Exit");
 
+            System.out.print("Enter: ");
             String input = scanner.nextLine().trim();
 
             switch (input.toUpperCase()) {
@@ -113,12 +114,12 @@ public class FinancialTracker {
     // The new payment should be added to the `transactions` ArrayList.
     private static void addPayment(Scanner scanner) {
         System.out.print("Enter the date in the format \"yyyy-MM-dd\": ");
-        LocalDate date = LocalDate.parse(scanner.nextLine(), DATE_FORMATTER);
+        LocalDate date = LocalDate.parse(scanner.nextLine().trim(), DATE_FORMATTER);
         System.out.print("Enter the time in the format \"HH:mm:ss\": ");
-        LocalTime time = LocalTime.parse(scanner.nextLine(), TIME_FORMATTER);
-        System.out.println("Enter the vendor: ");
-        String vendor = scanner.nextLine();
-        System.out.println("Enter the amount of the payment: ");
+        LocalTime time = LocalTime.parse(scanner.nextLine().trim(), TIME_FORMATTER);
+        System.out.print("Enter the vendor: ");
+        String vendor = scanner.nextLine().trim();
+        System.out.print("Enter the amount of the payment: ");
         BigDecimal payment = scanner.nextBigDecimal();
     }
 
@@ -147,6 +148,8 @@ public class FinancialTracker {
             System.out.println("R) Reports");
             System.out.println("H) Home");
 
+            System.out.print("Enter: ");
+
             String input = scanner.nextLine().trim();
 
             switch (input.toUpperCase()) {
@@ -164,6 +167,8 @@ public class FinancialTracker {
                     break;
                 case "H":
                     running = false;
+                    System.out.println("Returning Home");
+                    break;
                 default:
                     System.out.println("Invalid option");
                     break;
