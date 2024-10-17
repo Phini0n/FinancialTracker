@@ -2,10 +2,7 @@ package com.pluralsight;
 
 import java.io.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.Year;
-import java.time.YearMonth;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -267,24 +264,32 @@ public class FinancialTracker {
                 // including the date, time, description, vendor, and amount for each transaction.
                 case "1":
                     filterTransactionsByDate(YearMonth.from(LocalDate.now()).atDay(1),
-                            YearMonth.from(LocalDate.now()).atEndOfMonth());
+                            LocalDate.now());
                     break;
 
                 // Generate a report for all transactions within the previous month,
                 // including the date, time, description, vendor, and amount for each transaction.
                 case "2":
                     filterTransactionsByDate(YearMonth.from(LocalDate.now().minusMonths(1)).atDay(1),
-                            YearMonth.from(LocalDate.now().minusMonths(1)).atEndOfMonth());
+                                             YearMonth.from(LocalDate.now().minusMonths(1)).atEndOfMonth());
                     break;
 
                 // Generate a report for all transactions within the current year,
                 // including the date, time, description, vendor, and amount for each transaction.
                 case "3":
-                    
+                    Year thisYear = Year.from(LocalDate.now());
+
+                    MonthDay januaryFirst = MonthDay.of(1, 1);
+                    filterTransactionsByDate(Year.now().atMonthDay(MonthDay.of(1, 1)), LocalDate.now());
+                    break;
 
                 case "4":
-                    // Generate a report for all transactions within the previous year,
-                    // including the date, time, description, vendor, and amount for each transaction.
+                    Year lastYear = Year.from(LocalDate.now().minusYears(1));
+
+                    filterTransactionsByDate(lastYear.atMonthDay(MonthDay.of(1, 1)),
+                            lastYear.atMonth(Month.DECEMBER).atEndOfMonth());
+                    break;
+
                 case "5":
                     // Prompt the user to enter a vendor name, then generate a report for all transactions
                     // with that vendor, including the date, time, description, vendor, and amount for each transaction.
