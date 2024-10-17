@@ -219,128 +219,40 @@ public class FinancialTracker {
     private static void displayLedger() {
         System.out.println();
 
-        printTableLine(204, 0);
+        printTableHead("Transaction Ledger");
 
-        System.out.println("│"+ centerText("Transaction Ledger", 204) + "│");
-        printTableLine(204, 1);
-        System.out.println("│"+ centerText("DATE", 40) + "│" + centerText("TIME", 40) + "│"
-                       + centerText("DESCRIPTION", 40) + "│" + centerText("VENDOR", 40)
-                       + "│" + centerText("AMOUNT", 40) + "│");
-        printTableLine(204,  2);
         for (int i = 0; i < transactions.size(); i++) {
             Transaction transaction = transactions.get(i);
-            System.out.print("│");
-            System.out.print(centerText(transaction.getDate().toString(), 40) + "│");
-            System.out.print(centerText(transaction.getTime().toString(), 40) + "│");
-            System.out.print(centerText(transaction.getDescription(), 40) + "│");
-            System.out.print(centerText(transaction.getVendor(), 40) + "│");
-            System.out.println(centerText(transaction.getAmount().toString(), 40) + "│");
-            if (i == transactions.size()-1) {
-                printTableLine(204, 3);
-                break;
-            }
-            printTableLine(204, 2);
+            if (printTransactionsTable(i, transaction)) break;
         }
-    }
-
-    private static void printTableLine(int length, int isTop) {
-        switch (isTop) {
-            case 0 -> { // Top
-                System.out.print("┌");
-                for (int i = 0; i < length; i++) {
-                    System.out.print("─");
-                }
-                System.out.println("┐");
-            }
-            case 1 -> { // Middle-Top
-                System.out.print("├");
-                for (int i = 0; i < length; i++) {
-                    if ((i+1) % 41 == 0) {
-                        System.out.print("┬");
-                    }
-                    else {
-                        System.out.print("─");
-                    }
-                }
-                System.out.println("┤");
-            }
-            case 2 -> { // Middle Surrounded
-                System.out.print("├");
-                for (int i = 0; i < length; i++) {
-                    if ((i+1) % 41 == 0) {
-                        System.out.print("┼");
-                    }
-                    else {
-                        System.out.print("─");
-                    }
-                }
-                System.out.println("┤");
-            }
-            case 3 -> { // Bottom
-                System.out.print("└");
-                for (int i = 0; i < length; i++) {
-                    if ((i+1) % 41 == 0) {
-                        System.out.print("┴");
-                    }
-                    else {
-                        System.out.print("─");
-                    }
-                }
-                System.out.println("┘");
-            }
-
-        }
-    }
-
-    private static String centerText(String text, int width) {
-        String out = String.format("%"+width+"s%s%"+width+"s", "",text,"");
-        float mid = (out.length()/2);
-        float start = mid - (width/2);
-        float end = start + width;
-        return out.substring((int)start, (int)end);
     }
 
     // This method should display a table of all deposits in the `transactions` ArrayList.
     // The table should have columns for date, time, description, vendor, and amount.
     private static void displayDeposits() {
-//        System.out.println("\ndate|time|description|vendor|amount");
-//        for (Transaction transaction : transactions) {
-//            if (!transaction.isPayment) { System.out.println(transaction); }
-//        }
-        System.out.println();
+        printTableHead("Transaction Deposits");
 
-        printTableLine(204, 0);
-
-        System.out.println("│"+ centerText("Transaction Ledger", 204) + "│");
-        printTableLine(204, 1);
-        System.out.println("│"+ centerText("DATE", 40) + "│" + centerText("TIME", 40) + "│"
-                + centerText("DESCRIPTION", 40) + "│" + centerText("VENDOR", 40)
-                + "│" + centerText("AMOUNT", 40) + "│");
-        printTableLine(204,  2);
         for (int i = 0; i < transactions.size(); i++) {
             Transaction transaction = transactions.get(i);
-            System.out.print("│");
-            System.out.print(centerText(transaction.getDate().toString(), 40) + "│");
-            System.out.print(centerText(transaction.getTime().toString(), 40) + "│");
-            System.out.print(centerText(transaction.getDescription(), 40) + "│");
-            System.out.print(centerText(transaction.getVendor(), 40) + "│");
-            System.out.println(centerText(transaction.getAmount().toString(), 40) + "│");
-            if (i == transactions.size()-1) {
-                printTableLine(204, 3);
-                break;
+            if (!transaction.isPayment) {
+                if (printTransactionsTable(i, transaction)) break;
             }
-            printTableLine(204, 2);
+        }
     }
 
     // This method should display a table of all payments in the `transactions` ArrayList.
     // The table should have columns for date, time, description, vendor, and amount.
     private static void displayPayments() {
-        System.out.println("\ndate|time|description|vendor|amount");
-        for (Transaction transaction : transactions) {
-            if (transaction.isPayment) { System.out.println(transaction); }
+        printTableHead("Transaction Payments");
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction transaction = transactions.get(i);
+            if (transaction.isPayment) {
+                if (printTransactionsTable(i, transaction)) break;
+            }
         }
     }
 
+    // Reports
     private static void reportsMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
@@ -440,11 +352,95 @@ public class FinancialTracker {
     // Transactions with a matching vendor name are printed to the console.
     // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
     private static void filterTransactionsByVendor(String vendor) {
-        System.out.println("\ndate|time|description|vendor|amount");
-        for (Transaction transaction : transactions) {
-            if (vendor.equals(transaction.getVendor())) {
-                System.out.println(transaction);
+        printTableHead("Transactions Organized by Vendor");
+
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction transaction = transactions.get(i);
+            if (vendor.equalsIgnoreCase(transaction.getVendor())) {
+                if (printTransactionsTable(i, transaction)) break;
             }
         }
+    }
+
+    // Table Construction Methods
+    private static void printTableLine(int isTop) {
+        switch (isTop) {
+            case 0 -> { // Top
+                System.out.print("┌");
+                for (int i = 0; i < 204; i++) {
+                    System.out.print("─");
+                }
+                System.out.println("┐");
+            }
+            case 1 -> { // Middle-Top
+                System.out.print("├");
+                for (int i = 0; i < 204; i++) {
+                    if ((i+1) % 41 == 0) {
+                        System.out.print("┬");
+                    }
+                    else {
+                        System.out.print("─");
+                    }
+                }
+                System.out.println("┤");
+            }
+            case 2 -> { // Middle Surrounded
+                System.out.print("├");
+                for (int i = 0; i < 204; i++) {
+                    if ((i+1) % 41 == 0) {
+                        System.out.print("┼");
+                    }
+                    else {
+                        System.out.print("─");
+                    }
+                }
+                System.out.println("┤");
+            }
+            case 3 -> { // Bottom
+                System.out.print("└");
+                for (int i = 0; i < 204; i++) {
+                    if ((i+1) % 41 == 0) {
+                        System.out.print("┴");
+                    }
+                    else {
+                        System.out.print("─");
+                    }
+                }
+                System.out.println("┘");
+            }
+        }
+    }
+
+    private static String centerText(String text, int width) {
+        String out = String.format("%"+width+"s%s%"+width+"s", "",text,"");
+        float mid = (out.length()/2);
+        float start = mid - (width/2);
+        float end = start + width;
+        return out.substring((int)start, (int)end);
+    }
+
+    private static void printTableHead(String title) {
+        printTableLine(0);
+        System.out.println("│"+ centerText(title, 204) + "│");
+        printTableLine(1);
+        System.out.println("│"+ centerText("DATE", 40) + "│" + centerText("TIME", 40) + "│"
+                + centerText("DESCRIPTION", 40) + "│" + centerText("VENDOR", 40)
+                + "│" + centerText("AMOUNT", 40) + "│");
+        printTableLine(2);
+    }
+
+    private static boolean printTransactionsTable(int i, Transaction transaction) {
+        System.out.print("│");
+        System.out.print(centerText(transaction.getDate().toString(), 40) + "│");
+        System.out.print(centerText(transaction.getTime().toString(), 40) + "│");
+        System.out.print(centerText(transaction.getDescription(), 40) + "│");
+        System.out.print(centerText(transaction.getVendor(), 40) + "│");
+        System.out.println(centerText(transaction.getAmount().toString(), 40) + "│");
+        if (i == transactions.size()-1) {
+            printTableLine(3);
+            return true;
+        }
+        printTableLine(2);
+        return false;
     }
 }
