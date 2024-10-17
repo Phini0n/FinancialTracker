@@ -4,8 +4,10 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class FinancialTracker {
@@ -85,6 +87,9 @@ public class FinancialTracker {
                     }
                 }
                 bufferedReader.close();
+
+                // Sort by Date
+                transactions.sort(Comparator.comparing(Transaction::getDate).reversed());
             } catch (Exception e) {
                 System.out.println("Error: " + e);
             }
@@ -159,6 +164,7 @@ public class FinancialTracker {
     private static void writeTransaction(Transaction transaction) {
         // Adding to list of transactions
         transactions.add(transaction);
+        transactions.sort(Comparator.comparing(Transaction::getDate).reversed());
 
         // Writing to csv file
         try {
@@ -255,12 +261,18 @@ public class FinancialTracker {
             String input = scanner.nextLine().trim();
 
             switch (input) {
+
+                // Generate a report for all transactions within the current month,
+                // including the date, time, description, vendor, and amount for each transaction.
                 case "1":
-                    // Generate a report for all transactions within the current month,
-                    // including the date, time, description, vendor, and amount for each transaction.
+                    filterTransactionsByDate(YearMonth.from(LocalDate.now()).atDay(1),
+                            YearMonth.from(LocalDate.now()).atEndOfMonth());
+                    break;
+
+                // Generate a report for all transactions within the previous month,
+                // including the date, time, description, vendor, and amount for each transaction.
                 case "2":
-                    // Generate a report for all transactions within the previous month,
-                    // including the date, time, description, vendor, and amount for each transaction.
+
                 case "3":
                     // Generate a report for all transactions within the current year,
                     // including the date, time, description, vendor, and amount for each transaction.
@@ -284,12 +296,23 @@ public class FinancialTracker {
         }
     }
 
+    // This method filters the transactions by date and prints a report to the console.
+    // It takes two parameters: startDate and endDate, which represent the range of dates to filter by.
+    // The method loops through the transactions list and checks each transaction's date against the date range.
+    // Transactions that fall within the date range are printed to the console.
+    // If no transactions fall within the date range, the method prints a message indicating that there are no results.
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
-        // This method filters the transactions by date and prints a report to the console.
-        // It takes two parameters: startDate and endDate, which represent the range of dates to filter by.
-        // The method loops through the transactions list and checks each transaction's date against the date range.
-        // Transactions that fall within the date range are printed to the console.
-        // If no transactions fall within the date range, the method prints a message indicating that there are no results.
+        boolean isEmpty = true;
+        for (Transaction transaction : transactions) {
+            if (transaction.getDate().isAfter(startDate) && transaction.getDate().isBefore(endDate)) {
+                System.out.println(transaction);
+                isEmpty = false;
+            }
+        }
+
+        if (isEmpty) {
+            System.out.println("There are no results.");
+        }
     }
 
     // This method filters the transactions by vendor and prints a report to the console.
