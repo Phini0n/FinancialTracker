@@ -271,15 +271,18 @@ public class FinancialTracker {
                 case "5":
                     // Prompt the user to enter a vendor name, then generate a report for all transactions
                     // with that vendor, including the date, time, description, vendor, and amount for each transaction.
+                    System.out.print("Enter a vendor: ");
+                    filterTransactionsByVendor(scanner.nextLine().trim());
+                    break;
                 case "0":
                     running = false;
+                    break;
                 default:
                     System.out.println("Invalid option");
                     break;
             }
         }
     }
-
 
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
         // This method filters the transactions by date and prints a report to the console.
@@ -289,11 +292,18 @@ public class FinancialTracker {
         // If no transactions fall within the date range, the method prints a message indicating that there are no results.
     }
 
+    // This method filters the transactions by vendor and prints a report to the console.
+    // It takes one parameter: vendor, which represents the name of the vendor to filter by.
+    // The method loops through the transactions list and checks each transaction's vendor name against the specified vendor name.
+    // Transactions with a matching vendor name are printed to the console.
+    // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
     private static void filterTransactionsByVendor(String vendor) {
-        // This method filters the transactions by vendor and prints a report to the console.
-        // It takes one parameter: vendor, which represents the name of the vendor to filter by.
-        // The method loops through the transactions list and checks each transaction's vendor name against the specified vendor name.
-        // Transactions with a matching vendor name are printed to the console.
-        // If no transactions match the specified vendor name, the method prints a message indicating that there are no results.
+        System.out.println("\ndate|time|description|vendor|amount");
+        for (Transaction transaction : transactions) {
+            if (vendor.equals(transaction.getVendor())) {
+                System.out.println(transaction);
+            }
+        }
+        System.out.println();
     }
 }
