@@ -302,7 +302,7 @@ public class FinancialTracker {
     // Transactions that fall within the date range are printed to the console.
     // If no transactions fall within the date range, the method prints a message indicating that there are no results.
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
-        boolean isEmpty = true;
+        boolean isEmpty = true; // Checks if there are no transactions in the loop.
         for (Transaction transaction : transactions) {
             if (transaction.getDate().isAfter(startDate) && transaction.getDate().isBefore(endDate)) {
                 System.out.println(transaction);
