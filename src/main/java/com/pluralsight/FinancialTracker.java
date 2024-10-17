@@ -23,9 +23,9 @@ public class FinancialTracker {
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
-        System.out.print("Welcome to TransactionApp");
+        System.out.println("Welcome to TransactionApp");
         while (running) {
-            System.out.println("Choose an option:");
+            System.out.println("\nChoose an option:");
             System.out.println("D) Add Deposit");
             System.out.println("P) Make Payment (Debit)");
             System.out.println("L) Ledger");
@@ -178,7 +178,7 @@ public class FinancialTracker {
     private static void ledgerMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
-            System.out.println("Ledger");
+            System.out.println("\nLedger");
             System.out.println("Choose an option:");
             System.out.println("A) All");
             System.out.println("D) Deposits");
@@ -221,7 +221,6 @@ public class FinancialTracker {
         for (Transaction transaction : transactions) {
             System.out.println(transaction);
         }
-        System.out.println();
     }
 
     // This method should display a table of all deposits in the `transactions` ArrayList.
@@ -231,7 +230,6 @@ public class FinancialTracker {
         for (Transaction transaction : transactions) {
             if (!transaction.isPayment) { System.out.println(transaction); }
         }
-        System.out.println();
     }
 
     // This method should display a table of all payments in the `transactions` ArrayList.
@@ -241,13 +239,12 @@ public class FinancialTracker {
         for (Transaction transaction : transactions) {
             if (transaction.isPayment) { System.out.println(transaction); }
         }
-        System.out.println();
     }
 
     private static void reportsMenu(Scanner scanner) {
         boolean running = true;
         while (running) {
-            System.out.println("Reports");
+            System.out.println("\nReports");
             System.out.println("Choose an option:");
             System.out.println("1) Month To Date");
             System.out.println("2) Previous Month");
@@ -256,6 +253,8 @@ public class FinancialTracker {
             System.out.println("5) Search by Vendor");
             System.out.println("0) Back");
 
+            System.out.print("Enter: ");
+
             String input = scanner.nextLine().trim();
 
             switch (input) {
@@ -263,6 +262,7 @@ public class FinancialTracker {
                 // Generate a report for all transactions within the current month,
                 // including the date, time, description, vendor, and amount for each transaction.
                 case "1":
+                    System.out.println();
                     filterTransactionsByDate(YearMonth.from(LocalDate.now()).atDay(1),
                             LocalDate.now());
                     break;
@@ -270,6 +270,7 @@ public class FinancialTracker {
                 // Generate a report for all transactions within the previous month,
                 // including the date, time, description, vendor, and amount for each transaction.
                 case "2":
+                    System.out.println();
                     filterTransactionsByDate(YearMonth.from(LocalDate.now().minusMonths(1)).atDay(1),
                                              YearMonth.from(LocalDate.now().minusMonths(1)).atEndOfMonth());
                     break;
@@ -279,6 +280,7 @@ public class FinancialTracker {
                 case "3":
                     Year thisYear = Year.from(LocalDate.now());
 
+                    System.out.println();
                     MonthDay januaryFirst = MonthDay.of(1, 1);
                     filterTransactionsByDate(Year.now().atMonthDay(MonthDay.of(1, 1)), LocalDate.now());
                     break;
@@ -286,15 +288,21 @@ public class FinancialTracker {
                 case "4":
                     Year lastYear = Year.from(LocalDate.now().minusYears(1));
 
+                    System.out.println();
                     filterTransactionsByDate(lastYear.atMonthDay(MonthDay.of(1, 1)),
                             lastYear.atMonth(Month.DECEMBER).atEndOfMonth());
                     break;
 
+                // Prompt the user to enter a vendor name, then generate a report for all transactions
+                // with that vendor, including the date, time, description, vendor, and amount for each transaction.
                 case "5":
-                    // Prompt the user to enter a vendor name, then generate a report for all transactions
-                    // with that vendor, including the date, time, description, vendor, and amount for each transaction.
+                    System.out.println();
                     System.out.print("Enter a vendor: ");
                     filterTransactionsByVendor(scanner.nextLine().trim());
+                    break;
+
+                case "6":
+
                     break;
                 case "0":
                     running = false;
@@ -337,6 +345,5 @@ public class FinancialTracker {
                 System.out.println(transaction);
             }
         }
-        System.out.println();
     }
 }
