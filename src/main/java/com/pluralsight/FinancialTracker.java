@@ -217,19 +217,119 @@ public class FinancialTracker {
     // This method should display a table of all transactions in the `transactions` ArrayList.
     // The table should have columns for date, time, description, vendor, and amount.
     private static void displayLedger() {
-        System.out.println("\ndate|time|description|vendor|amount");
-        for (Transaction transaction : transactions) {
-            System.out.println(transaction);
+        System.out.println();
+
+        printTableLine(204, 0);
+
+        System.out.println("│"+ centerText("Transaction Ledger", 204) + "│");
+        printTableLine(204, 1);
+        System.out.println("│"+ centerText("DATE", 40) + "│" + centerText("TIME", 40) + "│"
+                       + centerText("DESCRIPTION", 40) + "│" + centerText("VENDOR", 40)
+                       + "│" + centerText("AMOUNT", 40) + "│");
+        printTableLine(204,  2);
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction transaction = transactions.get(i);
+            System.out.print("│");
+            System.out.print(centerText(transaction.getDate().toString(), 40) + "│");
+            System.out.print(centerText(transaction.getTime().toString(), 40) + "│");
+            System.out.print(centerText(transaction.getDescription(), 40) + "│");
+            System.out.print(centerText(transaction.getVendor(), 40) + "│");
+            System.out.println(centerText(transaction.getAmount().toString(), 40) + "│");
+            if (i == transactions.size()-1) {
+                printTableLine(204, 3);
+                break;
+            }
+            printTableLine(204, 2);
         }
+    }
+
+    private static void printTableLine(int length, int isTop) {
+        switch (isTop) {
+            case 0 -> { // Top
+                System.out.print("┌");
+                for (int i = 0; i < length; i++) {
+                    System.out.print("─");
+                }
+                System.out.println("┐");
+            }
+            case 1 -> { // Middle-Top
+                System.out.print("├");
+                for (int i = 0; i < length; i++) {
+                    if ((i+1) % 41 == 0) {
+                        System.out.print("┬");
+                    }
+                    else {
+                        System.out.print("─");
+                    }
+                }
+                System.out.println("┤");
+            }
+            case 2 -> { // Middle Surrounded
+                System.out.print("├");
+                for (int i = 0; i < length; i++) {
+                    if ((i+1) % 41 == 0) {
+                        System.out.print("┼");
+                    }
+                    else {
+                        System.out.print("─");
+                    }
+                }
+                System.out.println("┤");
+            }
+            case 3 -> { // Bottom
+                System.out.print("└");
+                for (int i = 0; i < length; i++) {
+                    if ((i+1) % 41 == 0) {
+                        System.out.print("┴");
+                    }
+                    else {
+                        System.out.print("─");
+                    }
+                }
+                System.out.println("┘");
+            }
+
+        }
+    }
+
+    private static String centerText(String text, int width) {
+        String out = String.format("%"+width+"s%s%"+width+"s", "",text,"");
+        float mid = (out.length()/2);
+        float start = mid - (width/2);
+        float end = start + width;
+        return out.substring((int)start, (int)end);
     }
 
     // This method should display a table of all deposits in the `transactions` ArrayList.
     // The table should have columns for date, time, description, vendor, and amount.
     private static void displayDeposits() {
-        System.out.println("\ndate|time|description|vendor|amount");
-        for (Transaction transaction : transactions) {
-            if (!transaction.isPayment) { System.out.println(transaction); }
-        }
+//        System.out.println("\ndate|time|description|vendor|amount");
+//        for (Transaction transaction : transactions) {
+//            if (!transaction.isPayment) { System.out.println(transaction); }
+//        }
+        System.out.println();
+
+        printTableLine(204, 0);
+
+        System.out.println("│"+ centerText("Transaction Ledger", 204) + "│");
+        printTableLine(204, 1);
+        System.out.println("│"+ centerText("DATE", 40) + "│" + centerText("TIME", 40) + "│"
+                + centerText("DESCRIPTION", 40) + "│" + centerText("VENDOR", 40)
+                + "│" + centerText("AMOUNT", 40) + "│");
+        printTableLine(204,  2);
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction transaction = transactions.get(i);
+            System.out.print("│");
+            System.out.print(centerText(transaction.getDate().toString(), 40) + "│");
+            System.out.print(centerText(transaction.getTime().toString(), 40) + "│");
+            System.out.print(centerText(transaction.getDescription(), 40) + "│");
+            System.out.print(centerText(transaction.getVendor(), 40) + "│");
+            System.out.println(centerText(transaction.getAmount().toString(), 40) + "│");
+            if (i == transactions.size()-1) {
+                printTableLine(204, 3);
+                break;
+            }
+            printTableLine(204, 2);
     }
 
     // This method should display a table of all payments in the `transactions` ArrayList.
@@ -322,7 +422,8 @@ public class FinancialTracker {
     private static void filterTransactionsByDate(LocalDate startDate, LocalDate endDate) {
         boolean isEmpty = true; // Checks if there are no transactions in the loop.
         for (Transaction transaction : transactions) {
-            if (transaction.getDate().isAfter(startDate) && transaction.getDate().isBefore(endDate)) {
+            if (transaction.getDate().minusDays(1).isAfter(startDate) &&
+                    transaction.getDate().plusDays(1).isBefore(endDate)) {
                 System.out.println(transaction);
                 isEmpty = false;
             }
