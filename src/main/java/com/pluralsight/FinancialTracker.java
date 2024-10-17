@@ -4,6 +4,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.Year;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -272,10 +273,14 @@ public class FinancialTracker {
                 // Generate a report for all transactions within the previous month,
                 // including the date, time, description, vendor, and amount for each transaction.
                 case "2":
+                    filterTransactionsByDate(YearMonth.from(LocalDate.now().minusMonths(1)).atDay(1),
+                            YearMonth.from(LocalDate.now().minusMonths(1)).atEndOfMonth());
+                    break;
 
+                // Generate a report for all transactions within the current year,
+                // including the date, time, description, vendor, and amount for each transaction.
                 case "3":
-                    // Generate a report for all transactions within the current year,
-                    // including the date, time, description, vendor, and amount for each transaction.
+                    
 
                 case "4":
                     // Generate a report for all transactions within the previous year,
