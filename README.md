@@ -1,10 +1,24 @@
-# Project Title
+# Financial Tracker
 
 ## Description of the Project
 
-Briefly describe what this Java console application does. Mention its purpose and who the intended users are. Explain the main functionality and what problems it aims to solve.
+The Financial Tracker project allows for a user to manually enter and view transactions from a csv file. 
+A **transaction** can be either a payment or deposit, and consists of:
+- Date 
+- Time 
+- Description 
+- Vendor 
+- Amount
 
-![Class Diagram](path/to/your/class_diagram.png)
+Transactions are stored within the program's ledger which can be printed out in various configurations. 
+The ledger print configurations consist of:
+- Month To Date
+- Previous Month
+- Year To Date
+- Previous Year
+- By Vendor
+
+The ledger writes into the "transactions.csv" file, given the correct input of transaction data.
 
 ## User Stories
 
@@ -32,10 +46,17 @@ Follow these steps to get your application running within IntelliJ IDEA:
 4. Find the main class with the `public static void main(String[] args)` method.
 5. Right-click on the file and select 'Run 'YourMainClassName.main()'' to start the application.
 
+### Using a pre-made .csv file
+
+In order to use a pre-made .csv file with transactions, the file must be named "transactions.csv" placed in the main program folder,
+and the information needs to follow this format:
+> date|time|description|vendor|amount
+
+ 
 ## Technologies Used
 
-- Java: Mention the version you are using.
-- Any additional libraries or frameworks used in the project.
+- IntelliJ IDEA 2023.3.3 (Ultimate Edition)
+- Java 17 (Amazon Corretto 17.0.12)
 
 ## Demo
 
@@ -47,7 +68,7 @@ Include screenshots or GIFs that show your application in action. Use tools like
 
 Outline potential future enhancements or functionalities you might consider adding:
 
-- Additional feature to be developed.
+- Adapt table visual to allow for more characters per cell.
 - Improvement of current functionalities.
 
 ## Resources

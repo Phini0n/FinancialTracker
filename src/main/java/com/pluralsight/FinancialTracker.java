@@ -72,12 +72,10 @@ public class FinancialTracker {
                     if (!line.isEmpty())
                     {
                         String[] str = line.split("\\|");
-                        String[] splitDate = str[0].split("-");
-                        String[] splitTime = str[1].split(":");
                         transactions.add( new Transaction(
                                 // Day, Month, Year
-                                LocalDate.of(Integer.parseInt(splitDate[0]),Integer.parseInt(splitDate[1]), Integer.parseInt(splitDate[2])), // Date
-                                LocalTime.of(Integer.parseInt(splitTime[0]),Integer.parseInt(splitTime[1]), Integer.parseInt(splitTime[2])), // Time
+                                LocalDate.parse(str[0], DATE_FORMATTER), // Date
+                                LocalTime.parse(str[1], TIME_FORMATTER), // Time
                                 str[2], // Description
                                 str[3], // Vendor
                                 new BigDecimal(str[4]) // Payment / Deposit
@@ -125,37 +123,40 @@ public class FinancialTracker {
     // Custom Method
     private static void promptTransaction(Scanner scanner, boolean isPayment) {
         String s = isPayment ? "payment" : "deposit";
+        try {
+            System.out.print("Enter the date in the format \"yyyy-MM-dd\": ");
+            LocalDate date = LocalDate.parse(scanner.nextLine().trim(), DATE_FORMATTER);
 
-        System.out.print("Enter the date in the format \"yyyy-MM-dd\": ");
-        LocalDate date = LocalDate.parse(scanner.nextLine().trim(), DATE_FORMATTER);
+            System.out.print("Enter the time in the format \"HH:mm:ss\": ");
+            LocalTime time = LocalTime.parse(scanner.nextLine().trim(), TIME_FORMATTER);
 
-        System.out.print("Enter the time in the format \"HH:mm:ss\": ");
-        LocalTime time = LocalTime.parse(scanner.nextLine().trim(), TIME_FORMATTER);
+            System.out.print("Enter the payment descriptor: ");
+            String description = scanner.nextLine().trim();
 
-        System.out.print("Enter the payment descriptor: ");
-        String description = scanner.nextLine().trim();
+            System.out.print("Enter the vendor: ");
+            String vendor = scanner.nextLine().trim();
 
-        System.out.print("Enter the vendor: ");
-        String vendor = scanner.nextLine().trim();
+            System.out.print("Enter the amount of the " + s + " : ");
+            BigDecimal payment = scanner.nextBigDecimal();
 
-        System.out.print("Enter the amount of the " + s + " : ");
-        BigDecimal payment = scanner.nextBigDecimal();
-
-        if (isPayment) { // If this is a payment, make sure the value remains negative.
-            if (payment.signum() > 0)
-            {
-                payment = payment.negate();
+            if (isPayment) { // If this is a payment, make sure the value remains negative.
+                if (payment.signum() > 0)
+                {
+                    payment = payment.negate();
+                }
+            } else { // If this is a deposit, make sure the value remains positive.
+                if (payment.signum() < 0) {
+                    payment = payment.abs();
+                }
             }
-        } else { // If this is a deposit, make sure the value remains positive.
-            if (payment.signum() < 0) {
-                payment = payment.abs();
-            }
+
+            scanner.nextLine();
+
+            Transaction transaction = new Transaction(date, time, description, vendor, payment);
+            writeTransaction(transaction);
+        } catch (Exception e) {
+            System.out.println("Error: " + e);
         }
-
-        scanner.nextLine();
-
-        Transaction transaction = new Transaction(date, time, description, vendor, payment);
-        writeTransaction(transaction);
     }
 
     // Custom Method
