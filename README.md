@@ -2,7 +2,7 @@
 
 ## Description of the Project
 
-The Financial Tracker project allows for a user to manually enter and view transactions from a csv file. 
+The Financial Tracker project allows for a user to manually enter and view transactions from a .csv file. 
 A **transaction** can be either a payment or deposit, and consists of:
 - Date 
 - Time 
@@ -21,11 +21,15 @@ The ledger print configurations consist of:
 The ledger writes into the "transactions.csv" file, given the correct input of transaction data.
 
 ## User Stories
-
-List the user stories that guided the development of your application. Format these stories as: "As a [type of user], I want [some goal] so that [some reason]."
-
-- As a user, I want to be able to input my data, so that the application can process it accordingly.
-- As a user, I want to receive immediate feedback, so I can understand what to do next.
+> - As a user, I need to see when a deposit or purchase has occurred in my finances, so that I can plan spending accordingly.
+> - As a user, I need the ability to import and export my transaction information so that I can use it in other places than just the Financial Tracker program.
+> - As a developer, I want to handle user input errors, so that the program won't shut down abruptly and cause user confusion and frustration.
+> - As a developer I want to handle how transactions are managed in the main ArrayList and written to the csv file, so that the program runs efficiently.
+> - As a user, I want to manually add transactions to the ledger, so that I can stay up to date on my purchases and deposits.
+> - As a user, I want to be able to search my transactions and deposits by vendor, so that I know when I've done business with that vendor.
+> - As a user, I want to be able to list transactions specified by dates, so that I can see my purchases and deposits during a certain window of time.
+> - As a user, I want to have a Home Menu, Ledger Menu, and Reports Menu, so that I can access the relevant transaction information with little to no confusion.
+> - As a user, I want to see my transaction information in a organized, visually appealing way, so that I can understand when transactions happened.
 
 ## Setup
 
@@ -49,7 +53,7 @@ Follow these steps to get your application running within IntelliJ IDEA:
 ### Using a pre-made .csv file
 
 In order to use a pre-made .csv file with transactions, the file must be named "transactions.csv" placed in the main program folder,
-and the information needs to follow this format:
+and the information needs to follow the format:
 > date|time|description|vendor|amount
 
  
@@ -59,33 +63,29 @@ and the information needs to follow this format:
 - Java 17 (Amazon Corretto 17.0.12)
 
 ## Demo
+### The Ledger Menu
+![Ledger Menu](imgs/LedgerProcess.PNG)
 
-Include screenshots or GIFs that show your application in action. Use tools like [Giphy Capture](https://giphy.com/apps/giphycapture) to record a GIF of your application.
+### Making a Payment in the Home Menu
+![Making a Payment](imgs/MakingPayment.PNG)
 
-![Application Screenshot](path/to/your/screenshot.png)
+### Searching by Vendor using the Reports Menu
+![Searching by Vendor](imgs/VendorSearch.PNG)
 
 ## Future Work
 
-Outline potential future enhancements or functionalities you might consider adding:
-
-- Adapt table visual to allow for more characters per cell.
-- Improvement of current functionalities.
+- Adapt table visual to allow for more characters per cell
+- Custom Search
+- Inline Comments and Documentation
 
 ## Resources
 
-List resources such as tutorials, articles, or documentation that helped you during the project.
+- [BigDecimal Documentation](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html)
+- [Year Documentation](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Year.html)
+- [YearMonth Documentation](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/YearMonth.html)
+- [Center Text Function (Stack Overflow)](https://stackoverflow.com/questions/8154366/how-to-center-a-string-using-string-format)
 
-- [Java Programming Tutorial](https://www.example.com)
-- [Effective Java](https://www.example.com)
-
-## Team Members
-
-- **Name 1** - Specific contributions or roles.
-- **Name 2** - Specific contributions or roles.
 
 ## Thanks
 
-Express gratitude towards those who provided help, guidance, or resources:
-
-- Thank you to [Mentor's Name] for continuous support and guidance.
-- A special thanks to all teammates for their dedication and teamwork.
+Thank you to Raymond Maroun for continuous support and guidance.
