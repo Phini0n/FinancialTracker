@@ -72,6 +72,11 @@ and the information needs to follow the format:
 ### Searching by Vendor using the Reports Menu
 ![Searching by Vendor](imgs/VendorSearch.PNG)
 
+## Unique Feature: Table Format
+My Financial Tracker program has a unique display of the table.
+![Unique Feature](imgs/Unique%20Feature.PNG)
+
+
 ## Future Work
 
 - Adapt table visual to allow for more characters per cell
