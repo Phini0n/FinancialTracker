@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
     private LocalDate date;
@@ -12,6 +13,8 @@ public class Transaction {
     private String vendor;
     BigDecimal amount; // Can be negative (for payment) or positive (for deposit).
     boolean isPayment; // Determines whether the amount is positive (false) or negative (true).
+    private static final String TIME_FORMAT = "HH:mm:ss";
+    private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(TIME_FORMAT);
 
     public Transaction(LocalDate date, LocalTime time, String description, String vendor, BigDecimal amount) {
         this.date = date;
@@ -39,8 +42,7 @@ public class Transaction {
 
     public void setPayment(boolean payment) { isPayment = payment; }
 
-    public LocalDate getDate() { return date;
-    }
+    public LocalDate getDate() { return date;}
 
     public void setDate(LocalDate date) { this.date = date; }
 
@@ -50,7 +52,7 @@ public class Transaction {
 
     @Override
     public String toString() {
-        return this.getDate() + "|" + this.getTime() + "|" + this.getDescription() + "|" +
+        return this.getDate() + "|" + this.getTime().format(TIME_FORMATTER) + "|" + this.getDescription() + "|" +
                 this.getVendor() + "|" + this.getAmount();
     }
 }

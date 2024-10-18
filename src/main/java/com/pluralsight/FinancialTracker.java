@@ -75,7 +75,7 @@ public class FinancialTracker {
                         transactions.add( new Transaction(
                                 // Day, Month, Year
                                 LocalDate.parse(str[0], DATE_FORMATTER), // Date
-                                LocalTime.parse(str[1], TIME_FORMATTER), // Time
+                                LocalTime.parse(str[1], TIME_FORMATTER),// Time
                                 str[2], // Description
                                 str[3], // Vendor
                                 new BigDecimal(str[4]) // Payment / Deposit
@@ -128,7 +128,7 @@ public class FinancialTracker {
             LocalDate date = LocalDate.parse(scanner.nextLine().trim(), DATE_FORMATTER);
 
             System.out.print("Enter the time in the format \"HH:mm:ss\": ");
-            LocalTime time = LocalTime.parse(scanner.nextLine().trim(), TIME_FORMATTER);
+            LocalTime time = LocalTime.parse(scanner.nextLine(), TIME_FORMATTER);
 
             System.out.print("Enter the payment descriptor: ");
             String description = scanner.nextLine().trim();
@@ -433,7 +433,7 @@ public class FinancialTracker {
     private static boolean printTransactionsTable(int i, Transaction transaction) {
         System.out.print("│");
         System.out.print(centerText(transaction.getDate().toString(), 40) + "│");
-        System.out.print(centerText(transaction.getTime().toString(), 40) + "│");
+        System.out.print(centerText(transaction.getTime().format(TIME_FORMATTER), 40) + "│");
         System.out.print(centerText(transaction.getDescription(), 40) + "│");
         System.out.print(centerText(transaction.getVendor(), 40) + "│");
         System.out.println(centerText(transaction.getAmount().toString(), 40) + "│");
